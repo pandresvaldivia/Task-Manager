@@ -1,4 +1,5 @@
 require('colors');
+const { getCreatedTime } = require('../helpers/date.helper');
 const { readTasks } = require('../helpers/file.helper');
 const Task = require('./task');
 
@@ -74,7 +75,11 @@ class TaskList {
 
 		for (const task of tasks) {
 			if (!task.isCompleted) {
-				pendingTasks.push(`• ${task.description}`);
+				pendingTasks.push(
+					`• ${task.description} :: Created at ${getCreatedTime(
+						task.created_at
+					)}`
+				);
 			}
 		}
 

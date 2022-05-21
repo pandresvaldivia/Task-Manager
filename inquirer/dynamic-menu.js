@@ -8,6 +8,7 @@ const createOptions = (options) => {
 
 		menuOptions.push({ value: id, name: description });
 	}
+	menuOptions.push({ value: '0', name: 'Exit' });
 
 	return menuOptions;
 };

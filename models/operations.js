@@ -6,12 +6,8 @@ const TaskList = require('./taskList');
 const operations = {
 	1: createTask,
 	2: showTasks,
-	3: () => {
-		showTaskByStatus('completed');
-	},
-	4: () => {
-		showTaskByStatus();
-	},
+	3: () => showTaskByStatus('completed'),
+	4: showTaskByStatus,
 	5: () => {
 		console.log('option 5');
 	},
@@ -46,7 +42,12 @@ function showTaskByStatus(status = 'pending') {
 }
 
 async function deleteTask() {
-	const id = await showDynamicMenu(taskList.tasksArray);
+	const id = await showDynamicMenu(
+		taskList.tasksArray,
+		'Which task do you want to delete?'
+	);
+
+	if (id === '0') return;
 
 	const remove = await confirm(`Are you sure you want to delete this task?`);
 
