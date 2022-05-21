@@ -15,11 +15,33 @@ class TaskList {
 
 	loadTasks() {
 		const tasks = readTasks();
-		const tasksId = Object.keys(tasks);
 
-		for (const taskId of tasksId) {
-			this.tasks[taskId] = tasks[taskId];
+		for (const task of tasks) {
+			this.tasks[task.id] = task;
 		}
+	}
+
+	taskStatus(status) {
+		return status ? 'Completed'.green : 'Pending'.red;
+	}
+
+	deleteTask(id) {
+		delete this.tasks[id];
+	}
+
+	get tasksInfo() {
+		const tasks = this.tasksArray;
+		const tasksInfo = [];
+
+		for (const task of tasks) {
+			const { description, status } = task;
+
+			const info = `• ${description} :: ${this.taskStatus(status)}`;
+
+			tasksInfo.push(info);
+		}
+
+		return tasksInfo;
 	}
 
 	get tasksArray() {
@@ -27,13 +49,36 @@ class TaskList {
 		const tasksId = Object.keys(this.tasks);
 
 		for (const taskId of tasksId) {
-			const { description, isCompleted } = this.tasks[taskId];
-			const state = isCompleted ? 'Completed'.green : 'Pending'.red;
-
-			list.push(`${description} :: ${state}`);
+			list.push(this.tasks[taskId]);
 		}
 
 		return list;
+	}
+
+	get completedTasks() {
+		const tasks = this.tasksArray;
+		const completedTasks = [];
+
+		for (const task of tasks) {
+			if (task.isCompleted) {
+				completedTasks.push(`• ${task.description}`);
+			}
+		}
+
+		return completedTasks;
+	}
+
+	get pendingTasks() {
+		const tasks = this.tasksArray;
+		const pendingTasks = [];
+
+		for (const task of tasks) {
+			if (!task.isCompleted) {
+				pendingTasks.push(`• ${task.description}`);
+			}
+		}
+
+		return pendingTasks;
 	}
 }
 
