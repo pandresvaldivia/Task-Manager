@@ -1,6 +1,7 @@
 require('colors');
-const { getCreatedTime } = require('../helpers/date.helper');
+const { getTimeElapse } = require('../helpers/date.helper');
 const { readTasks } = require('../helpers/file.helper');
+const { now } = require('../helpers/date.helper');
 const Task = require('./task');
 
 class TaskList {
@@ -23,7 +24,18 @@ class TaskList {
 	}
 
 	taskStatus(status) {
-		return status ? 'Completed'.green : 'Pending'.red;
+		return status ? '✅ Completed'.green : '❌ Pending'.red;
+	}
+
+	toogleStatus(ids) {
+		for (const task of this.tasksArray) {
+			if (ids.includes(task.id)) {
+				task.completed_at = now();
+				continue;
+			}
+
+			task.completed_at = false;
+		}
 	}
 
 	deleteTask(id) {
@@ -35,9 +47,9 @@ class TaskList {
 		const tasksInfo = [];
 
 		for (const task of tasks) {
-			const { description, status } = task;
+			const { description, completed_at } = task;
 
-			const info = `• ${description} :: ${this.taskStatus(status)}`;
+			const info = `• ${description} :: ${this.taskStatus(completed_at)}`;
 
 			tasksInfo.push(info);
 		}
@@ -61,8 +73,12 @@ class TaskList {
 		const completedTasks = [];
 
 		for (const task of tasks) {
-			if (task.isCompleted) {
-				completedTasks.push(`• ${task.description}`);
+			if (task.completed_at) {
+				completedTasks.push(
+					`• ${task.description} :: ✅ Completed ${getTimeElapse(
+						task.completed_at
+					)}`
+				);
 			}
 		}
 
@@ -74,9 +90,9 @@ class TaskList {
 		const pendingTasks = [];
 
 		for (const task of tasks) {
-			if (!task.isCompleted) {
+			if (!task.completed_at) {
 				pendingTasks.push(
-					`• ${task.description} :: Created at ${getCreatedTime(
+					`• ${task.description} :: ⏳ Created ${getTimeElapse(
 						task.created_at
 					)}`
 				);

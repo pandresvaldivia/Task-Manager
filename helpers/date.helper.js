@@ -1,25 +1,10 @@
 const dayjs = require('dayjs');
+const relativeTime = require('dayjs/plugin/relativeTime');
 
-const getCreatedTime = (taskDate) => {
-	const today = dayjs();
+dayjs.extend(relativeTime);
 
-	let diff = today.diff(taskDate, 'day');
-
-	if (diff > 0) return `${diff} days ago`;
-
-	diff = today.diff(taskDate, 'hour');
-
-	if (diff > 0) return `${diff} hours ago`;
-
-	diff = today.diff(taskDate, 'minute');
-
-	if (diff > 0) return `${diff} minutes ago`;
-
-	diff = today.diff(taskDate, 'second');
-
-	if (diff > 0) return `${diff} seconds ago`;
-
-	return 'just now';
+const getTimeElapse = (taskDate) => {
+	return dayjs(taskDate).fromNow();
 };
 
 const now = () => {
@@ -28,5 +13,5 @@ const now = () => {
 
 module.exports = {
 	now,
-	getCreatedTime,
+	getTimeElapse,
 };

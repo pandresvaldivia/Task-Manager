@@ -1,5 +1,9 @@
 const { saveTask } = require('../helpers/file.helper');
-const { showDynamicMenu, confirm } = require('../inquirer/dynamic-menu');
+const {
+	showDynamicMenu,
+	confirm,
+	showCheckBoxMenu,
+} = require('../inquirer/dynamic-menu');
 const { input } = require('../inquirer/input');
 const TaskList = require('./taskList');
 
@@ -8,13 +12,8 @@ const operations = {
 	2: showTasks,
 	3: () => showTaskByStatus('completed'),
 	4: showTaskByStatus,
-	5: () => {
-		console.log('option 5');
-	},
+	5: completeTasks,
 	6: deleteTask,
-	0: () => {
-		console.log('Exit');
-	},
 };
 
 const taskList = new TaskList();
@@ -39,6 +38,17 @@ function showTaskByStatus(status = 'pending') {
 	for (const task of tasks) {
 		console.log(task);
 	}
+}
+
+async function completeTasks() {
+	const tasksId = await showCheckBoxMenu(
+		taskList.tasksArray,
+		'Select tasks to complete'
+	);
+
+	taskList.toogleStatus(tasksId);
+
+	saveData();
 }
 
 async function deleteTask() {

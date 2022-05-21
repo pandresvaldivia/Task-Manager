@@ -1,17 +1,6 @@
 const inquirer = require('inquirer');
 
-const createOptions = (options) => {
-	const menuOptions = [];
-
-	for (const option of options) {
-		const { id, description } = option;
-
-		menuOptions.push({ value: id, name: description });
-	}
-	menuOptions.push({ value: '0', name: 'Exit' });
-
-	return menuOptions;
-};
+const { createOptions, createPendingOptions } = require('./options');
 
 const showDynamicMenu = async (options, message = '') => {
 	const menuOptions = createOptions(options);
@@ -26,6 +15,19 @@ const showDynamicMenu = async (options, message = '') => {
 	return option;
 };
 
+const showCheckBoxMenu = async (options, message = '') => {
+	const menuOptions = createPendingOptions(options);
+
+	const { tasks } = await inquirer.prompt({
+		type: 'checkbox',
+		name: 'tasks',
+		message,
+		choices: menuOptions,
+	});
+
+	return tasks;
+};
+
 const confirm = async (message = '') => {
 	const { answer } = await inquirer.prompt({
 		type: 'confirm',
@@ -38,5 +40,6 @@ const confirm = async (message = '') => {
 
 module.exports = {
 	showDynamicMenu,
+	showCheckBoxMenu,
 	confirm,
 };

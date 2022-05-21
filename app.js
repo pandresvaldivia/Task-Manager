@@ -7,9 +7,10 @@ const main = async () => {
 	do {
 		option = await showMenu();
 
-		await operations[option]();
-
-		if (option !== '0') await pause();
+		if (option !== '0') {
+			await operations[option]();
+			await pause();
+		}
 	} while (option !== '0');
 };
 

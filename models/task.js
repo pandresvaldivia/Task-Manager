@@ -6,7 +6,7 @@ class Task {
 		this.id = uuidv4();
 		this.description = description;
 		this.created_at = now();
-		this.isCompleted = false;
+		this.completed_at = false;
 	}
 }
 
